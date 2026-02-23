@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ENDURANT — The Arena</title>
+  <meta name="description" content="Luxury athletic endurance challenges. One weekly flagship. One long-form series. Members-only leaderboards." />
+  <style>
+    :root{
+      --bg:#0f1115;--panel:#171a1f;--text:#f2f2f2;--muted:#8a8f98;
+      --line:rgba(242,242,242,.10);--accent:#0f3d2e;--accent2:#c9b8a6;
+      --shadow:0 18px 60px rgba(0,0,0,.45);--radius:18px;--radius2:26px;--max:1120px;
+    }
+    *{box-sizing:border-box} html,body{height:100%}
+    body{
+      margin:0;
+      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      background:radial-gradient(1200px 600px at 20% -10%, rgba(15,61,46,.35), transparent 60%),
+                 radial-gradient(900px 500px at 90% 0%, rgba(201,184,166,.18), transparent 60%),
+                 var(--bg);
+      color:var(--text);letter-spacing:.2px;
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:var(--max);margin:0 auto;padding:28px 18px 70px}
+    header{
+      display:flex;align-items:center;justify-content:space-between;gap:14px;
+      position:sticky;top:0;z-index:10;
+      background:linear-gradient(to bottom, rgba(15,17,21,.92), rgba(15,17,21,.72), rgba(15,17,21,0));
+      backdrop-filter:blur(10px);padding:18px 0 12px;
+    }
+    .brand{display:flex;align-items:center;gap:10px}
+    .mark{
+      width:34px;height:34px;border-radius:11px;
+      background:linear-gradient(140deg, rgba(15,61,46,1), rgba(201,184,166,.7));
+      box-shadow:0 10px 24px rgba(0,0,0,.35);position:relative;
+    }
+    .mark:after{content:"";position:absolute;inset:9px;border-radius:8px;border:1px solid rgba(242,242,242,.18)}
+    .brand h1{font-size:13px;margin:0;letter-spacing:2.6px;font-weight:650}
+    .brand span{display:block;font-size:11px;color:var(--muted);letter-spacing:1.2px;margin-top:2px}
+    nav{display:flex;gap:14px;align-items:center}
+    nav a{
+      font-size:12px;color:var(--muted);padding:10px 10px;border-radius:12px;border:1px solid transparent;transition:.15s ease;
+    }
+    nav a:hover{color:var(--text);border-color:rgba(242,242,242,.12);background:rgba(255,255,255,.03)}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      padding:12px 14px;border-radius:14px;border:1px solid rgba(242,242,242,.16);
+      background:rgba(255,255,255,.03);color:var(--text);cursor:pointer;font-weight:600;transition:.15s ease;user-select:none;
+    }
+    .btn:hover{transform:translateY(-1px);border-color:rgba(242,242,242,.22);background:rgba(255,255,255,.05)}
+    .btn.primary{
+      border-color:rgba(15,61,46,.55);
+      background:linear-gradient(180deg, rgba(15,61,46,.95), rgba(15,61,46,.65));
+      box-shadow:0 16px 50px rgba(15,61,46,.16);
+    }
+    .btn.primary:hover{border-color:rgba(201,184,166,.45)}
+    .hero{padding:38px 0 18px;display:grid;grid-template-columns:1.15fr .85fr;gap:18px;align-items:start}
+    .kicker{
+      display:inline-flex;gap:10px;align-items:center;color:var(--muted);
+      border:1px solid rgba(242,242,242,.12);background:rgba(255,255,255,.03);
+      padding:9px 12px;border-radius:999px;font-size:12px;
+    }
+    .dot{width:8px;height:8px;border-radius:99px;background:var(--accent2);box-shadow:0 0 0 6px rgba(201,184,166,.12)}
+    .hero h2{margin:14px 0 10px;font-size:clamp(34px,4vw,56px);line-height:1.02;letter-spacing:-1px}
+    .hero p{margin:0;color:rgba(242,242,242,.82);font-size:15px;line-height:1.5;max-width:56ch}
+    .heroActions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+    .mini{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:12px}
+    .mini b{color:var(--text);font-weight:650}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid rgba(242,242,242,.10);border-radius:var(--radius2);
+      box-shadow:var(--shadow);overflow:hidden;
+    }
+    .cardHead{padding:16px 18px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+    .cardHead .t{font-size:12px;color:var(--muted);letter-spacing:1.5px}
+    .pill{font-size:12px;color:rgba(242,242,242,.88);border:1px solid rgba(242,242,242,.14);background:rgba(255,255,255,.03);padding:8px 10px;border-radius:999px}
+    .cardBody{padding:12px 18px 16px}
+    .eventTitle{font-size:20px;margin:6px 0 6px;letter-spacing:-.2px}
+    .meta{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:10px}
+    .meta span{display:inline-flex;gap:8px;align-items:center}
+    .bar{height:1px;background:var(--line);margin:14px 0}
+    .big{display:flex;align-items:baseline;justify-content:space-between;gap:14px;padding:8px 0}
+    .big .label{font-size:11px;color:var(--muted);letter-spacing:1.2px}
+    .big .value{font-size:26px;font-weight:750;letter-spacing:-.6px}
+    .ctaRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    section{margin-top:26px}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .feature{padding:16px 18px;border-radius:var(--radius);border:1px solid rgba(242,242,242,.10);background:rgba(255,255,255,.02)}
+    .feature h3{margin:0 0 8px;font-size:14px;letter-spacing:.6px}
+    .feature p{margin:0;color:rgba(242,242,242,.76);font-size:13px;line-height:1.5}
+    .pricing{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch}
+    .priceBox{padding:18px}
+    .price{font-size:42px;font-weight:800;letter-spacing:-1.2px;margin:8px 0 6px}
+    .price small{font-size:14px;color:var(--muted);font-weight:600;letter-spacing:.2px}
+    ul{margin:14px 0 0;padding:0 0 0 18px;color:rgba(242,242,242,.80)}
+    li{margin:8px 0;font-size:13px;line-height:1.4}
+    footer{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap}
+    .fine{max-width:78ch}
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.58);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:18px;z-index:100}
+    .overlay.show{display:flex}
+    .modal{width:min(540px,100%)}
+    .modalInner{padding:18px}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    input{
+      width:100%;padding:12px 12px;border-radius:14px;border:1px solid rgba(242,242,242,.14);
+      background:rgba(0,0,0,.25);color:var(--text);outline:none;font-size:14px;
+    }
+    input:focus{border-color:rgba(201,184,166,.35);box-shadow:0 0 0 6px rgba(201,184,166,.08)}
+    @media (max-width:920px){
+      .hero{grid-template-columns:1fr}
+      .grid3{grid-template-columns:1fr}
+      .pricing{grid-template-columns:1fr}
+      nav{display:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div>
+          <h1>ENDURANT</h1>
+          <span>Luxury endurance arena</span>
+        </div>
+      </div>
+
+      <nav>
+        <a href="#how">How it works</a>
+        <a href="#pricing">Membership</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <div style="display:flex; gap:10px; align-items:center;">
+        <button class="btn" id="openWaitlist">Join waitlist</button>
+        <a class="btn primary" href="#pricing">Become a member</a>
+      </div>
+    </header>
+
+    <div class="hero">
+      <div>
+        <div class="kicker"><span class="dot"></span> Open Division runs weekly. Members compete in the Arena.</div>
+        <h2>One weekly flagship.<br/>One long-form series.<br/>No noise.</h2>
+        <p>
+          ENDURANT is a minimal, high-performance challenge platform.
+          Enter the Open Division for free. Upgrade to unlock the Members Arena, full leaderboards,
+          prize pools, and long-form endurance series.
+        </p>
+
+        <div class="heroActions">
+          <button class="btn primary" id="openPreview">View this week</button>
+          <button class="btn" id="openWaitlist2">Get early access</button>
+        </div>
+
+        <div class="mini">
+          <span><b>Edgy. Controlled.</b></span>
+          <span>Members-only leaderboards</span>
+          <span>Performance aliases</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="cardHead">
+          <div class="t">LIVE THIS WEEK</div>
+          <div class="pill">Prize Pool  $1,000</div>
+        </div>
+        <div class="cardBody">
+          <div class="eventTitle">THE SMOKO 60</div>
+          <div style="color:rgba(242,242,242,.78); font-size:13px; line-height:1.45;">
+            60 seconds. Max reps. Clean standards. One submission.
+          </div>
+
+          <div class="meta">
+            <span>Closes <b id="weeklyCloseText" style="color:var(--text); font-weight:650;">in 2d 14h</b></span>
+            <span>Division <b style="color:var(--text); font-weight:650;">Members</b></span>
+            <span>Leaderboard <b style="color:var(--text); font-weight:650;">Locked</b></span>
+          </div>
+
+          <div class="bar"></div>
+
+          <div class="big">
+            <div>
+              <div class="label">SERIES</div>
+              <div class="value">LAST ONE STANDING</div>
+            </div>
+            <div style="text-align:right">
+              <div class="label">REMAINING</div>
+              <div class="value" style="font-size:30px">42</div>
+            </div>
+          </div>
+
+          <div class="meta">
+            <span>Day <b style="color:var(--text); font-weight:650;">17</b></span>
+            <span>Prize Pool <b style="color:var(--text); font-weight:650;">$4,865</b></span>
+            <span>Division <b style="color:var(--text); font-weight:650;">Members</b></span>
+          </div>
+
+          <div class="ctaRow">
+            <button class="btn" id="openLocked">Enter Arena</button>
+            <button class="btn" id="openOpenDivision">Open Division</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section id="how">
+      <div class="grid3">
+        <div class="feature">
+          <h3>Open Division</h3>
+          <p>Free weekly challenge. Submit proof. Winner takes the drop.</p>
+        </div>
+        <div class="feature">
+          <h3>Members Arena</h3>
+          <p>Full leaderboards, prize pools, and curated weekly flagship events.</p>
+        </div>
+        <div class="feature">
+          <h3>Endurance Series</h3>
+          <p>Long-form challenges that run for weeks or months. Attrition. Streaks. Status.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing">
+      <div class="pricing">
+        <div class="card priceBox">
+          <div class="t" style="padding:16px 18px 0;">MEMBERSHIP</div>
+          <div class="modalInner">
+            <div class="price">$5 <small>/ week</small></div>
+            <div style="color:rgba(242,242,242,.76); font-size:13px; line-height:1.55;">
+              Access the arena. Compete weekly. Enter the series. Earn your place.
+            </div>
+            <ul>
+              <li>Members-only leaderboards</li>
+              <li>Weekly flagship prize pools</li>
+              <li>Long-form endurance series</li>
+              <li>Performance aliases + rank tiers</li>
+            </ul>
+            <div class="ctaRow" style="margin-top:16px;">
+              <a class="btn primary" href="#" onclick="alert('Hook this button to Stripe Checkout / a Payment Link.'); return false;">Become a member</a>
+              <button class="btn" id="openWaitlist3">Get launch invite</button>
+            </div>
+            <div style="margin-top:10px; font-size:12px; color:var(--muted)">Cancel anytime. No lock-ins.</div>
+          </div>
+        </div>
+
+        <div class="card priceBox">
+          <div class="t" style="padding:16px 18px 0;">OPEN DIVISION</div>
+          <div class="modalInner">
+            <div class="price">$0 <small>/ week</small></div>
+            <div style="color:rgba(242,242,242,.76); font-size:13px; line-height:1.55;">
+              Enter weekly for free. Earn the invite. Upgrade when you’re ready.
+            </div>
+            <ul>
+              <li>Weekly Open Challenge entry</li>
+              <li>Winner announcements</li>
+              <li>Top performances (limited view)</li>
+              <li>Upgrade to unlock full arena</li>
+            </ul>
+            <div class="ctaRow" style="margin-top:16px;">
+              <button class="btn" id="openOpenDivision2">Enter free</button>
+              <button class="btn" id="openWaitlist4">Join waitlist</button>
+            </div>
+            <div style="margin-top:10px; font-size:12px; color:var(--muted)">No leaderboard access unless you’re a member.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="card" style="padding:18px;">
+        <div class="t" style="letter-spacing:1.5px;">FAQ</div>
+        <div class="bar"></div>
+
+        <details style="padding:10px 0; border-bottom:1px solid var(--line);">
+          <summary style="cursor:pointer; font-weight:650;">Do members need to use real names?</summary>
+          <div style="color:rgba(242,242,242,.78); font-size:13px; line-height:1.55; padding-top:10px;">
+            No. You can compete under a performance alias. The Arena is about output.
+          </div>
+        </details>
+
+        <details style="padding:10px 0; border-bottom:1px solid var(--line);">
+          <summary style="cursor:pointer; font-weight:650;">What proof is required?</summary>
+          <div style="color:rgba(242,242,242,.78); font-size:13px; line-height:1.55; padding-top:10px;">
+            Each challenge defines its proof standard. Typically: unedited video + activity verification.
+            (Strava can be optional or required depending on the event.)
+          </div>
+        </details>
+
+        <details style="padding:10px 0;">
+          <summary style="cursor:pointer; font-weight:650;">When does the leaderboard unlock?</summary>
+          <div style="color:rgba(242,242,242,.78); font-size:13px; line-height:1.55; padding-top:10px;">
+            Arena leaderboards are members-only. Open Division shows limited top performances and the winner.
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <footer>
+      <div class="fine">© <span id="y"></span> ENDURANT. Built for performance. Not attention.</div>
+      <div style="display:flex; gap:12px;">
+        <a href="#" onclick="alert('Add your Terms page link.'); return false;">Terms</a>
+        <a href="#" onclick="alert('Add your Privacy page link.'); return false;">Privacy</a>
+        <a href="#" onclick="document.getElementById('openWaitlist').click(); return false;">Contact</a>
+      </div>
+    </footer>
+  </div>
+
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="card modal">
+      <div class="cardHead">
+        <div class="t" id="modalTitle">EARLY ACCESS</div>
+        <button class="btn" id="closeModal" aria-label="Close">Close</button>
+      </div>
+      <div class="modalInner">
+        <div class="eventTitle" style="margin-top:0;">Get the invite.</div>
+        <div style="color:rgba(242,242,242,.76); font-size:13px; line-height:1.55;">
+          Drop your email. We’ll send launch access + the first weekly event.
+        </div>
+        <div class="bar"></div>
+        <form id="waitlistForm">
+          <div class="row">
+            <input type="email" id="email" name="email" placeholder="Email" required />
+          </div>
+          <div class="ctaRow" style="margin-top:12px;">
+            <button class="btn primary" type="submit">Join waitlist</button>
+            <button class="btn" type="button" id="demoFill">Use demo email</button>
+          </div>
+          <div id="msg" style="margin-top:10px; font-size:12px; color:var(--muted);"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const overlay = document.getElementById('overlay');
+    const openButtons = ['openWaitlist','openWaitlist2','openWaitlist3','openWaitlist4']
+      .map(id => document.getElementById(id)).filter(Boolean);
+
+    function openModal(){ overlay.classList.add('show'); document.getElementById('email').focus(); }
+    function closeModal(){ overlay.classList.remove('show'); }
+
+    openButtons.forEach(b => b.addEventListener('click', openModal));
+    document.getElementById('closeModal').addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e)=>{ if(e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeModal(); });
+
+    document.getElementById('openPreview').addEventListener('click', ()=>{
+      alert('Preview placeholder. Next: build the web app/dashboard.');
+    });
+
+    document.getElementById('openLocked').addEventListener('click', ()=>{
+      alert('Members-only. Hook this to Stripe + auth gate.');
+    });
+
+    document.getElementById('openOpenDivision').addEventListener('click', ()=>{
+      alert('Open Division entry placeholder. Hook this to signup + submission flow.');
+    });
+    document.getElementById('openOpenDivision2').addEventListener('click', ()=>{
+      alert('Open Division entry placeholder. Hook this to signup + submission flow.');
+    });
+
+    const form = document.getElementById('waitlistForm');
+    const msg = document.getElementById('msg');
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      msg.textContent = 'Submitting…';
+      const email = document.getElementById('email').value.trim();
+      // TODO: send to your backend endpoint
+      await new Promise(r => setTimeout(r, 450));
+      msg.textContent = `You’re in. ${email}`;
+      form.reset();
+      setTimeout(closeModal, 650);
+    });
+
+    document.getElementById('demoFill').addEventListener('click', ()=>{
+      document.getElementById('email').value = 'southern17@endurant.co';
+      document.getElementById('email').focus();
+    });
+
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    const weeklyCloseText = document.getElementById('weeklyCloseText');
+    const closeAt = new Date();
+    closeAt.setDate(closeAt.getDate() + 2);
+    closeAt.setHours(closeAt.getHours() + 14);
+
+    function tick(){
+      const now = new Date();
+      let ms = closeAt - now;
+      if(ms < 0) ms = 0;
+      const d = Math.floor(ms / 86400000); ms -= d * 86400000;
+      const h = Math.floor(ms / 3600000);  ms -= h * 3600000;
+      const m = Math.floor(ms / 60000);
+      weeklyCloseText.textContent = `in ${d}d ${h}h ${m}m`;
+    }
+    tick(); setInterval(tick, 30000);
+  </script>
+</body>
+</html>
