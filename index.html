@@ -397,3 +397,33 @@
   </script>
 </body>
 </html>
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  msg.textContent = 'Submitting…';
+
+  const email = document.getElementById('email').value.trim();
+
+  try {
+    const res = await fetch('https://YOUR-PROJECT-REF.functions.supabase.co/waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        source: 'landing',
+        utm: {
+          ref: document.referrer || null,
+          path: location.pathname
+        }
+      })
+    });
+
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Failed');
+
+    msg.textContent = `You’re in. ${email}`;
+    form.reset();
+    setTimeout(closeModal, 650);
+  } catch (err) {
+    msg.textContent = 'Error — try again.';
+  }
+});
